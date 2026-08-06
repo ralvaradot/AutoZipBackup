@@ -1,7 +1,0 @@
-{
-  "version":"1.0",
-  "language":"es",
-  "theme":"darkly",
-  "auto_run":true,
-  "tasks":[{"enabled":true,"source_folder":"","destination_folder":"","execution_time":"22:00"}]
-}
