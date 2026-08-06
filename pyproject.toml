@@ -1,0 +1,74 @@
+[build-system]
+requires = ["setuptools>=75.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "autozipbackup"
+version = "1.0.0"
+description = "Automatic ZIP Backup Scheduler"
+readme = "README.md"
+requires-python = ">=3.13"
+license = { text = "MIT" }
+
+authors = [
+    { name = "Roberto Alvarado" }
+]
+
+keywords = [
+    "backup",
+    "zip",
+    "scheduler",
+    "automation",
+    "python"
+]
+
+dependencies = [
+    "ttkbootstrap>=1.14.0",
+    "APScheduler>=3.11.0",
+    "Pillow>=11.0.0"
+]
+
+[project.optional-dependencies]
+
+dev = [
+    "pytest>=8.3",
+    "pytest-cov>=6.0",
+    "ruff>=0.8",
+    "mypy>=1.14"
+]
+
+[tool.ruff]
+
+line-length = 100
+
+target-version = "py313"
+
+[tool.ruff.lint]
+
+select = [
+    "E",
+    "F",
+    "I",
+    "UP",
+    "B"
+]
+
+[tool.pytest.ini_options]
+
+pythonpath = [
+    "src"
+]
+
+testpaths = [
+    "tests"
+]
+
+[tool.mypy]
+
+python_version = "3.13"
+
+warn_unused_configs = true
+
+disallow_untyped_defs = true
+
+ignore_missing_imports = true

@@ -1,0 +1,55 @@
+# Python
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+
+.venv/
+venv/
+env/
+
+# VS Code
+
+.vscode/
+
+# JetBrains
+
+.idea/
+
+# Distribution
+
+dist/
+build/
+*.egg-info/
+
+# Logs
+
+logs/*.log
+
+# Backup
+
+backups/*.zip
+
+# Pytest
+
+.pytest_cache/
+
+# MyPy
+
+.mypy_cache/
+
+# Ruff
+
+.ruff_cache/
+
+# Coverage
+
+.coverage
+htmlcov/
+
+# OS
+
+Thumbs.db
+.DS_Store
