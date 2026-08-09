@@ -1,60 +1,46 @@
 [build-system]
-requires = ["setuptools>=75.0"]
+requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
+
 
 [project]
 name = "autozipbackup"
-version = "1.0.0"
-description = "Automatic ZIP Backup Scheduler"
+version = "0.1.0"
+description = "Automated folder backup application for Windows."
 readme = "README.md"
-requires-python = ">=3.13"
-license = { text = "MIT" }
-
+requires-python = ">=3.11"
 authors = [
-    { name = "Roberto Alvarado" }
-]
-
-keywords = [
-    "backup",
-    "zip",
-    "scheduler",
-    "automation",
-    "python"
+    { name = "AutoZipBackup Team" }
 ]
 
 dependencies = [
-    "ttkbootstrap>=1.14.0",
-    "APScheduler>=3.11.0",
-    "Pillow>=11.0.0"
+    "ttkbootstrap>=1.10",
+    "APScheduler>=3.10,<4",
 ]
+
 
 [project.optional-dependencies]
-
 dev = [
-    "pytest>=8.3",
-    "pytest-cov>=6.0",
-    "ruff>=0.8",
-    "mypy>=1.14"
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "pytest-mock>=3.14",
+    "ruff>=0.6",
 ]
 
-[tool.ruff]
 
-line-length = 100
+[project.scripts]
+autozipbackup = "autozip.main:main"
 
-target-version = "py313"
 
-[tool.ruff.lint]
+[tool.setuptools]
+package-dir = {"" = "src"}
 
-select = [
-    "E",
-    "F",
-    "I",
-    "UP",
-    "B"
-]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
 
 [tool.pytest.ini_options]
-
 pythonpath = [
     "src"
 ]
@@ -63,12 +49,17 @@ testpaths = [
     "tests"
 ]
 
-[tool.mypy]
 
-python_version = "3.13"
+[tool.ruff]
+line-length = 88
+target-version = "py311"
 
-warn_unused_configs = true
 
-disallow_untyped_defs = true
-
-ignore_missing_imports = true
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "I",
+    "B",
+    "UP",
+]

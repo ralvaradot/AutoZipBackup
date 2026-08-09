@@ -1,39 +1,29 @@
-# AutoZip Backup
+# AutoZipBackup
 
-Aplicación de escritorio desarrollada en Python para automatizar la creación de respaldos comprimidos en formato ZIP.
+AutoZipBackup is a Windows desktop application for automated folder backups.
 
-## Características
+## Current Version
 
-- Interfaz moderna con ttkbootstrap
-- Programación diaria de tareas
-- Múltiples tareas de respaldo
-- Cambio de idioma Español / Inglés
-- Temas Claro / Oscuro
-- Logging profesional
-- Verificación de integridad
-- Restauración de respaldos
+0.1.0
 
-## Tecnologías
+## Technology
 
-- Python 3.13
+- Python 3.11+
 - ttkbootstrap
 - APScheduler
-- pathlib
-- logging
-- zipfile
+- pytest
 
-## Arquitectura
+## Architecture
 
-Clean Architecture
+The project follows a modular architecture documented through Architecture Decision Records (ADRs).
 
-Presentation
+See:
 
-Application
+`docs/adr/`
 
-Domain
+## Development
 
-Infrastructure
+Create a virtual environment:
 
-## Estado
-
-🚧 En desarrollo
+```bash
+python -m venv .venv

@@ -1,55 +1,40 @@
 # Python
-
 __pycache__/
 *.py[cod]
-*$py.class
+*.pyo
 
-# Virtual Environment
-
+# Virtual environments
 .venv/
 venv/
 env/
 
-# VS Code
-
-.vscode/
-
-# JetBrains
-
-.idea/
-
-# Distribution
-
-dist/
+# Build
 build/
+dist/
 *.egg-info/
 
-# Logs
+# PyInstaller
+*.spec.bak
 
-logs/*.log
-
-# Backup
-
-backups/*.zip
-
-# Pytest
-
+# Testing
 .pytest_cache/
-
-# MyPy
-
-.mypy_cache/
-
-# Ruff
-
-.ruff_cache/
-
-# Coverage
-
 .coverage
 htmlcov/
 
-# OS
+# Ruff
+.ruff_cache/
 
-Thumbs.db
+# Application runtime
+logs/
+*.log
+
+# Application configuration
+settings.json
+
+# IDE
+.vscode/
+.idea/
+
+# OS
 .DS_Store
+Thumbs.db
