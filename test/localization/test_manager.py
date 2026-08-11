@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 from autozip.common.exceptions import LocalizationError
+from autozip.events import EventDispatcher, LanguageChanged
 from autozip.localization import (
     LocalizationManager,
     TranslationProvider,
@@ -113,3 +114,55 @@ def test_missing_translation_parameter_raises_error(
         manager.translate("welcome")
 
     assert exc_info.value.code == "TRANSLATION_FORMAT_ERROR"
+
+def test_language_change_publishes_event(
+    tmp_path: Path,
+) -> None:
+    """Changing language must publish LanguageChanged."""
+    manager = create_manager(tmp_path)
+
+    dispatcher = EventDispatcher()
+
+    manager = LocalizationManager(
+        TranslationProvider(tmp_path),
+        event_dispatcher=dispatcher,
+    )
+
+    received: list[LanguageChanged] = []
+
+    def handler(event: LanguageChanged) -> None:
+        received.append(event)
+
+    dispatcher.subscribe(
+        LanguageChanged,
+        handler,
+    )
+
+    manager.set_language("en")
+
+    assert len(received) == 1
+    assert received[0].language == "en"    
+
+def test_setting_same_language_does_not_publish_event(
+    tmp_path: Path,
+) -> None:
+    """Setting the current language must not publish an event."""
+    dispatcher = EventDispatcher()
+
+    manager = LocalizationManager(
+        TranslationProvider(tmp_path),
+        event_dispatcher=dispatcher,
+    )
+
+    received: list[LanguageChanged] = []
+
+    dispatcher.subscribe(
+        LanguageChanged,
+        received.append,
+    )
+
+    manager.set_language("es")
+
+    assert received == []
+
+        

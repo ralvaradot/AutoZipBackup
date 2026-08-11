@@ -1,10 +1,13 @@
 """Application localization manager."""
 
+from datetime import datetime
+
 from autozip.common.constants import (
     DEFAULT_LANGUAGE,
     SUPPORTED_LANGUAGES,
 )
 from autozip.common.exceptions import LocalizationError
+from autozip.events import EventDispatcher, LanguageChanged
 from autozip.localization.provider import TranslationProvider
 
 
@@ -15,10 +18,12 @@ class LocalizationManager:
         self,
         provider: TranslationProvider,
         default_language: str = DEFAULT_LANGUAGE,
+        event_dispatcher: EventDispatcher | None = None,
     ) -> None:
         self._provider = provider
         self._language = default_language
         self._translations: dict[str, str] = {}
+        self._event_dispatcher = event_dispatcher
 
         self._load_language(default_language)
 
@@ -35,19 +40,25 @@ class LocalizationManager:
                 code="UNSUPPORTED_LANGUAGE",
             )
 
+        if language == self._language:
+            return
+
         self._load_language(language)
+
+        if self._event_dispatcher is not None:
+            self._event_dispatcher.publish(
+                LanguageChanged(
+                    occurred_at=datetime.now(),
+                    language=language,
+                )
+            )
 
     def translate(
         self,
         key: str,
         **kwargs: object,
     ) -> str:
-        """Translate a key.
-
-        If the key does not exist, the key itself is returned.
-        This makes missing translations visible without crashing
-        the application.
-        """
+        """Translate a key."""
         value = self._translations.get(key, key)
 
         if kwargs:

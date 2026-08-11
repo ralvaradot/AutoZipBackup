@@ -3,6 +3,7 @@
 import pytest
 
 from autozip.common.exceptions import ConfigurationError
+from autozip.events import EventDispatcher, ThemeChanged
 from autozip.ui.theme import ThemeManager
 
 
@@ -64,3 +65,67 @@ def test_invalid_appearance_raises_error() -> None:
         manager.set_appearance("blue")
 
     assert exc_info.value.code == "UNSUPPORTED_APPEARANCE"
+
+
+def test_theme_change_publishes_event() -> None:
+    """Changing theme must publish ThemeChanged."""
+    dispatcher = EventDispatcher()
+
+    manager = ThemeManager(
+        event_dispatcher=dispatcher,
+    )
+
+    received: list[ThemeChanged] = []
+
+    dispatcher.subscribe(
+        ThemeChanged,
+        received.append,
+    )
+
+    manager.set_theme("superhero")
+
+    assert len(received) == 1
+    assert received[0].theme == "superhero"
+    assert received[0].appearance == "dark"
+
+def test_appearance_change_publishes_event() -> None:
+    """Changing appearance must publish ThemeChanged."""
+    dispatcher = EventDispatcher()
+
+    manager = ThemeManager(
+        event_dispatcher=dispatcher,
+    )
+
+    received: list[ThemeChanged] = []
+
+    dispatcher.subscribe(
+        ThemeChanged,
+        received.append,
+    )
+
+    manager.set_appearance("light")
+
+    assert len(received) == 1
+    assert received[0].appearance == "light"
+    assert received[0].theme == "flatly"
+
+def test_same_theme_does_not_publish_event() -> None:
+    """Setting the current theme must not publish an event."""
+    dispatcher = EventDispatcher()
+
+    manager = ThemeManager(
+        event_dispatcher=dispatcher,
+    )
+
+    received: list[ThemeChanged] = []
+
+    dispatcher.subscribe(
+        ThemeChanged,
+        received.append,
+    )
+
+    manager.set_theme("darkly")
+
+    assert received == []
+
+            

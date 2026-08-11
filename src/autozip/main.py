@@ -1,5 +1,4 @@
 """AutoZipBackup application entry point."""
-
 from autozip.common.constants import (
     DEFAULT_LOG_BACKUP_COUNT,
     DEFAULT_LOG_MAX_BYTES,
@@ -7,6 +6,11 @@ from autozip.common.constants import (
 from autozip.common.logging import LogManager
 from autozip.common.paths import ApplicationPaths
 from autozip.common.version import get_version_info
+from autozip.events import (
+    EventDispatcher,
+    LanguageChanged,
+    ThemeChanged,
+)
 from autozip.localization import (
     LocalizationManager,
     TranslationProvider,
@@ -63,6 +67,8 @@ def main() -> None:
 
         settings = settings_manager.load()
 
+        event_dispatcher = EventDispatcher()
+
         translation_provider = TranslationProvider(
             paths.languages_directory
         )
@@ -70,11 +76,13 @@ def main() -> None:
         localization_manager = LocalizationManager(
             translation_provider,
             default_language=settings.language,
+            event_dispatcher=event_dispatcher,
         )
 
         theme_manager = ThemeManager(
             theme=settings.theme,
             appearance=settings.appearance,
+            event_dispatcher=event_dispatcher,
         )
 
         logger.info(
@@ -87,6 +95,24 @@ def main() -> None:
             theme_manager.appearance,
             theme_manager.theme,
         )
+
+        def log_event(event: object) -> None:
+            logger.info(
+                "Application event: %s",
+                type(event).__name__,
+            )
+
+
+        event_dispatcher.subscribe(
+            LanguageChanged,
+            log_event,
+        )
+
+        event_dispatcher.subscribe(
+            ThemeChanged,
+            log_event,
+        )
+        
 
         print(
             localization_manager.translate("app.name")
