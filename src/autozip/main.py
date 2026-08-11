@@ -7,7 +7,15 @@ from autozip.common.constants import (
 from autozip.common.logging import LogManager
 from autozip.common.paths import ApplicationPaths
 from autozip.common.version import get_version_info
-from autozip.settings import SettingsManager, SettingsRepository
+from autozip.localization import (
+    LocalizationManager,
+    TranslationProvider,
+)
+from autozip.settings import (
+    SettingsManager,
+    SettingsRepository,
+)
+from autozip.ui.theme import ThemeManager
 
 
 def main() -> None:
@@ -22,66 +30,100 @@ def main() -> None:
 
     logger = log_manager.configure()
 
-    version_info = get_version_info()
+    try:
+        version_info = get_version_info()
 
-    logger.info(
-        "Starting %s version %s.",
-        version_info["application_name"],
-        version_info["application_version"],
-    )
+        logger.info(
+            "Starting %s version %s.",
+            version_info["application_name"],
+            version_info["application_version"],
+        )
 
-    logger.info(
-        "Build number: %s.",
-        version_info["build_number"],
-    )
+        logger.info(
+            "Build number: %s.",
+            version_info["build_number"],
+        )
 
-    logger.info(
-        "Git commit: %s.",
-        version_info["git_commit"],
-    )
+        logger.info(
+            "Git commit: %s.",
+            version_info["git_commit"],
+        )
 
-    settings_file = paths.application_root / "settings.json"
+        settings_file = (
+            paths.application_root / "settings.json"
+        )
 
-    repository = SettingsRepository(settings_file)
+        repository = SettingsRepository(
+            settings_file
+        )
 
-    settings_manager = SettingsManager(repository)
+        settings_manager = SettingsManager(
+            repository
+        )
 
-    settings = settings_manager.load()
+        settings = settings_manager.load()
 
-    logger.info(
-        "Settings loaded successfully. "
-        "Language=%s, Appearance=%s, Theme=%s.",
-        settings.language,
-        settings.appearance,
-        settings.theme,
-    )
+        translation_provider = TranslationProvider(
+            paths.languages_directory
+        )
 
-    print(
-        f"{version_info['application_name']} "
-        f"{version_info['application_version']}"
-    )
+        localization_manager = LocalizationManager(
+            translation_provider,
+            default_language=settings.language,
+        )
 
-    print(
-        f"Build: {version_info['build_number']}"
-    )
+        theme_manager = ThemeManager(
+            theme=settings.theme,
+            appearance=settings.appearance,
+        )
 
-    print(
-        f"Git Commit: {version_info['git_commit']}"
-    )
+        logger.info(
+            "Localization initialized. Language=%s.",
+            localization_manager.language,
+        )
 
-    print(
-        f"Language: {settings.language}"
-    )
+        logger.info(
+            "Theme initialized. Appearance=%s, Theme=%s.",
+            theme_manager.appearance,
+            theme_manager.theme,
+        )
 
-    print(
-        f"Appearance: {settings.appearance}"
-    )
+        print(
+            localization_manager.translate("app.name")
+        )
 
-    print(
-        f"Theme: {settings.theme}"
-    )
+        print(
+            f"{localization_manager.translate('about.version')}: "
+            f"{version_info['application_version']}"
+        )
 
-    log_manager.shutdown()
+        print(
+            f"{localization_manager.translate('about.build')}: "
+            f"{version_info['build_number']}"
+        )
+
+        print(
+            f"{localization_manager.translate('about.git_commit')}: "
+            f"{version_info['git_commit']}"
+        )
+
+        print(
+            f"{localization_manager.translate('settings.language')}: "
+            f"{localization_manager.language}"
+        )
+
+        print(
+            f"{localization_manager.translate('settings.appearance')}: "
+            f"{theme_manager.appearance}"
+        )
+
+        print(
+            f"{localization_manager.translate('settings.theme')}: "
+            f"{theme_manager.theme}"
+        )
+
+    finally:
+        log_manager.shutdown()
 
 
 if __name__ == "__main__":

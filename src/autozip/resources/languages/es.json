@@ -1,0 +1,55 @@
+{
+    "app.name": "AutoZipBackup",
+
+    "menu.file": "Archivo",
+    "menu.settings": "Configuración",
+    "menu.help": "Ayuda",
+    "menu.exit": "Salir",
+
+    "settings.title": "Configuración",
+
+    "settings.language": "Idioma",
+    "settings.language.spanish": "Español",
+    "settings.language.english": "Inglés",
+
+    "settings.appearance": "Apariencia",
+    "settings.appearance.light": "Claro",
+    "settings.appearance.dark": "Oscuro",
+
+    "settings.theme": "Tema",
+
+    "common.save": "Guardar",
+    "common.cancel": "Cancelar",
+    "common.close": "Cerrar",
+    "common.apply": "Aplicar",
+    "common.browse": "Examinar",
+    "common.enabled": "Activo",
+    "common.disabled": "Inactivo",
+
+    "backup.title": "Backup",
+    "backup.source_folder": "Carpeta de origen",
+    "backup.destination_folder": "Carpeta de destino",
+    "backup.create": "Crear backup",
+    "backup.start": "Iniciar backup",
+    "backup.completed": "Backup completado correctamente",
+    "backup.failed": "El backup ha fallado",
+
+    "scheduler.title": "Tareas programadas",
+    "scheduler.add": "Agregar tarea",
+    "scheduler.edit": "Editar tarea",
+    "scheduler.delete": "Eliminar tarea",
+    "scheduler.enable": "Activar",
+    "scheduler.disable": "Desactivar",
+    "scheduler.time": "Hora",
+    "scheduler.daily": "Diariamente",
+
+    "status.ready": "Listo",
+    "status.running": "Ejecutando",
+    "status.completed": "Completado",
+    "status.error": "Error",
+
+    "about.title": "Acerca de",
+    "about.version": "Versión",
+    "about.build": "Compilación",
+    "about.git_commit": "Git Commit"
+}
