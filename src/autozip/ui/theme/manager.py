@@ -1,5 +1,4 @@
 """ttkbootstrap theme management."""
-
 from datetime import datetime
 from typing import Final
 
@@ -90,12 +89,6 @@ class ThemeManager:
         """Apply the current theme to a ttkbootstrap window."""
         window.style.theme_use(self._theme)
 
-    def create_window(self) -> ttk.Window:
-        """Create a ttkbootstrap window using current settings."""
-        return ttk.Window(
-            title="AutoZipBackup",
-            themename=self._theme,
-        )
 
     def _publish_change(self) -> None:
         """Publish a ThemeChanged event."""
