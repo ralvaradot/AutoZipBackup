@@ -22,9 +22,23 @@ class ApplicationError(Exception):
 
 
 class BackupError(ApplicationError):
-    """Base exception for backup-related errors."""
+    """Base exception for backup operations."""
 
 
+class BackupSourceNotFoundError(BackupError):
+    """Raised when the source folder does not exist."""
+
+
+class BackupSourceInvalidError(BackupError):
+    """Raised when the source path is not a directory."""
+
+
+class BackupDestinationError(BackupError):
+    """Raised when the destination cannot be used."""
+
+
+class BackupCompressionError(BackupError):
+    """Raised when ZIP compression fails."""
 class SchedulerError(ApplicationError):
     """Base exception for scheduler-related errors."""
 

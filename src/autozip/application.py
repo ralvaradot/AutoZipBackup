@@ -1,5 +1,5 @@
 """Application bootstrap and composition root."""
-
+from autozip.backup import BackupService
 from autozip.common.constants import (
     DEFAULT_LOG_BACKUP_COUNT,
     DEFAULT_LOG_MAX_BYTES,
@@ -8,6 +8,9 @@ from autozip.common.logging import LogManager
 from autozip.common.paths import ApplicationPaths
 from autozip.common.version import get_version_info
 from autozip.events import (
+    BackupCompleted,
+    BackupFailed,
+    BackupStarted,
     EventDispatcher,
     LanguageChanged,
     ThemeChanged,
@@ -47,6 +50,8 @@ class Application:
         self._localization_manager: LocalizationManager | None = None
         self._theme_manager: ThemeManager | None = None
         self._main_window: MainWindow | None = None
+
+        self._backup_service: BackupService | None = None
 
         self._configure_services()
 
@@ -140,6 +145,11 @@ class Application:
             event_dispatcher=self._event_dispatcher,
         )
 
+        self._backup_service = BackupService(
+            event_dispatcher=self._event_dispatcher,
+            logger=self._logger,
+        )
+
         self._event_dispatcher.subscribe(
             LanguageChanged,
             self._on_language_changed,
@@ -149,6 +159,22 @@ class Application:
             ThemeChanged,
             self._on_theme_changed,
         )
+        self._event_dispatcher.subscribe(
+            BackupStarted,
+            self._on_backup_started,
+        )
+
+        self._event_dispatcher.subscribe(
+            BackupCompleted,
+            self._on_backup_completed,
+        )
+
+        self._event_dispatcher.subscribe(
+            BackupFailed,
+            self._on_backup_failed,
+        )
+
+
 
     def _on_language_changed(
         self,
@@ -221,3 +247,45 @@ class Application:
             "Theme: %s.",
             self.theme_manager.theme,
         )
+
+    @property
+    def backup_service(self) -> BackupService:
+        """Return the backup service."""
+        if self._backup_service is None:
+            raise RuntimeError(
+                "Backup service has not been initialized."
+            )
+
+        return self._backup_service
+
+    def _on_backup_started(
+        self,
+        event: BackupStarted,
+    ) -> None:
+        """Log backup start."""
+        self._logger.info(
+            "Backup started: %s",
+            event.source_folder,
+        )
+
+    def _on_backup_completed(
+        self,
+        event: BackupCompleted,
+    ) -> None:
+        """Log backup completion."""
+        self._logger.info(
+            "Backup completed: %s",
+            event.destination_file,
+        )
+
+    def _on_backup_failed(
+        self,
+        event: BackupFailed,
+    ) -> None:
+        """Log backup failure."""
+        self._logger.error(
+            "Backup failed: %s",
+            event.error_message,
+        )
+
+               
