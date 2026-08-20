@@ -8,7 +8,7 @@ from autozip.common.version import (
 )
 from autozip.scheduler.service import SchedulerService
 
-self._scheduler_service: SchedulerService | None = None  # noqa: F821
+# self._scheduler_service: SchedulerService | None = None  # noqa: F821
 
 __all__ = [
     "APPLICATION_NAME",
