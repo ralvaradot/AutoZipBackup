@@ -73,12 +73,18 @@ class LogManager:
         return self._logger
 
     def shutdown(self) -> None:
-        """Shutdown and release logging handlers."""
-        handlers = self._logger.handlers[:]
+        """Shutdown the application."""
+        self._logger.info(
+            "Application shutdown requested."
+        )
 
-        for handler in handlers:
-            handler.flush()
-            handler.close()
-            self._logger.removeHandler(handler)
+        if self._scheduler_service is not None:
+            self._scheduler_service.stop()
 
-        self._configured = False
+        if self._main_window is not None:
+            self._main_window.destroy()
+            self._main_window = None
+
+        self._log_manager.shutdown()
+
+        

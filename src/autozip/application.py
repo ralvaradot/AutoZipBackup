@@ -19,6 +19,7 @@ from autozip.localization import (
     LocalizationManager,
     TranslationProvider,
 )
+from autozip.scheduler import SchedulerService
 from autozip.settings import (
     SettingsManager,
     SettingsRepository,
@@ -103,15 +104,22 @@ class Application:
 
         self._main_window.run()
 
+
     def shutdown(self) -> None:
         """Shutdown the application."""
-        self._logger.info("Application shutdown requested.")
+        self._logger.info(
+            "Application shutdown requested."
+        )
+
+        if self._scheduler_service is not None:
+            self._scheduler_service.stop()
 
         if self._main_window is not None:
             self._main_window.destroy()
             self._main_window = None
 
         self._log_manager.shutdown()
+
 
     def _configure_services(self) -> None:
         """Create and configure application services."""
@@ -288,4 +296,43 @@ class Application:
             event.error_message,
         )
 
-               
+    def _on_scheduler_started(
+        self,
+        event: SchedulerStarted,
+    ) -> None:
+        """Log scheduler start."""
+        self._logger.info(
+            "Scheduler started."
+        )
+
+
+    def _on_scheduler_stopped(
+        self,
+        event: SchedulerStopped,
+    ) -> None:
+        """Log scheduler stop."""
+        self._logger.info(
+            "Scheduler stopped."
+        )
+
+
+    def _on_scheduled_backup_completed(
+        self,
+        event: ScheduledBackupCompleted,
+    ) -> None:
+        """Log scheduled backup completion."""
+        self._logger.info(
+            "Scheduled backup completed: %s",
+            event.destination_file,
+        )
+
+
+    def _on_scheduled_backup_failed(
+        self,
+        event: ScheduledBackupFailed,
+    ) -> None:
+        """Log scheduled backup failure."""
+        self._logger.error(
+            "Scheduled backup failed: %s",
+            event.error_message,
+        )
