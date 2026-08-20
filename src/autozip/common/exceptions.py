@@ -39,8 +39,6 @@ class BackupDestinationError(BackupError):
 
 class BackupCompressionError(BackupError):
     """Raised when ZIP compression fails."""
-class SchedulerError(ApplicationError):
-    """Base exception for scheduler-related errors."""
 
 
 class ConfigurationError(ApplicationError):
@@ -65,3 +63,18 @@ class VerificationError(BackupError):
 
 class UnexpectedApplicationError(ApplicationError):
     """Represents an unexpected application-level failure."""
+
+class SchedulerError(ApplicationError):
+    """Base exception for scheduler operations."""
+
+
+class SchedulerAlreadyRunningError(SchedulerError):
+    """Raised when starting an already running scheduler."""
+
+
+class SchedulerNotRunningError(SchedulerError):
+    """Raised when an operation requires a running scheduler."""
+
+
+class InvalidScheduleTimeError(SchedulerError):
+    """Raised when the configured execution time is invalid."""    

@@ -53,14 +53,40 @@ class BackupFailed(ApplicationEvent):
 
 
 @dataclass(frozen=True)
-class SchedulerStarted(ApplicationEvent):
-    """Raised when the scheduler starts."""
+class SchedulerStarted:
+    """Published when the scheduler starts."""
 
-    pass
+    occurred_at: datetime
 
 
 @dataclass(frozen=True)
-class SchedulerStopped(ApplicationEvent):
-    """Raised when the scheduler stops."""
+class SchedulerStopped:
+    """Published when the scheduler stops."""
 
-    pass
+    occurred_at: datetime
+
+
+@dataclass(frozen=True)
+class ScheduledBackupStarted:
+    """Published when a scheduled backup starts."""
+
+    occurred_at: datetime
+    source_folder: Path
+    destination_folder: Path
+
+
+@dataclass(frozen=True)
+class ScheduledBackupCompleted:
+    """Published when a scheduled backup completes."""
+
+    occurred_at: datetime
+    destination_file: Path
+
+
+@dataclass(frozen=True)
+class ScheduledBackupFailed:
+    """Published when a scheduled backup fails."""
+
+    occurred_at: datetime
+    source_folder: Path
+    error_message: str
